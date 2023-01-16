@@ -3,23 +3,23 @@ package MitkoMazeTask.src.solution;
 import java.util.*;
 
 public class Node{
-    private char[][] goal = {{'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
-                            {'*', '*', '*', '*', '*', '*', '*', 'N', 'N', 'N', '*', '*', '*'},
-                            {'*', '*', 'N', 'N', '*', '*', 'N', 'N', '*', 'N', '*', '*', '*'},
-                            {'*', '*', '*', 'N', '*', '*', '*', '*', '*', 'N', 'N', 'N', '*'},
-                            {'*', '*', '*', 'N', '*', '*', '*', 'M', '*', 'N', '*', '*', '*'},
-                            {'*', '*', '*', 'N', 'N', 'N', 'N', 'N', 'N', 'N', '*', '*', '*'},
-                            {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
-                            {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'}};
+    private char[][] goal = {{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                            {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'N', 'N', 'N', ' ', ' ', ' '},
+                            {' ', ' ', 'N', 'N', ' ', ' ', 'N', 'N', ' ', 'N', ' ', ' ', ' '},
+                            {' ', '~', ' ', 'N', ' ', ' ', '~', ' ', ' ', 'N', ' ', ' ', ' '},
+                            {' ', ' ', ' ', 'N', ' ', ' ', '~', 'M', ' ', 'N', ' ', ' ', ' '},
+                            {' ', '~', ' ', 'N', 'N', 'N', 'N', 'N', 'N', 'N', ' ', ' ', ' '},
+                            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', ' '}};
     private char[][] state;
     private Node parent;
     private int goalRow = 4;
     private int goalCol = 7;
-    private int cost = 0;
+    private double cost = 0;
     private List<Node> neighbours;
     private int mRow;
     private int mCol;
-
+    private double totalCost = 0;
 
     public boolean isGoal(char[][] state) {
         for (int i = 0; i <= 7; i++) {
@@ -94,7 +94,6 @@ public class Node{
 
         return temp;
     }
-
     public List<Node> getNeighbours() {
         if (this.neighbours == null) {
             int rowM = getMRow();
@@ -105,7 +104,11 @@ public class Node{
             if (rowM >= 0 && rowM <= 7 && colM <= 12 && colM > 0 && state[rowM][colM - 1] != 'N') {
                 char[][] neighbourState = swapper(state, rowM, colM, rowM, colM - 1);
                 Node neighbour = new Node(neighbourState, this, rowM, colM - 1);
-                this.cost += 1;
+                if (state[rowM][colM - 1] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1;
+                }
                 result.add(neighbour);
 
             }
@@ -114,7 +117,11 @@ public class Node{
             if (rowM >= 0 && rowM <= 7 && colM < 12 && colM >= 0 && state[rowM][colM + 1] != 'N') {
                 char[][] neighbourState = swapper(state, rowM, colM, rowM, colM + 1);
                 Node neighbour = new Node(neighbourState, this, rowM, colM + 1);
-                this.cost += 1;
+                if (state[rowM][colM + 1] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1;
+                }
                 result.add(neighbour);
             }
 
@@ -122,7 +129,11 @@ public class Node{
             if (rowM > 0 && rowM <= 7 && colM <= 12 && colM >= 0 && state[rowM - 1][colM] != 'N') {
                 char[][] neighbourState = swapper(state, rowM, colM, rowM - 1, colM);
                 Node neighbour = new Node(neighbourState, this, rowM - 1, colM);
-                this.cost += 1;
+                if (state[rowM - 1][colM] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1;
+                }
                 result.add(neighbour);
             }
 
@@ -130,7 +141,59 @@ public class Node{
             if (rowM >= 0 && rowM < 7 && colM <= 12 && colM >= 0 && state[rowM + 1][colM] != 'N') {
                 char[][] neighbourState = swapper(state, rowM, colM, rowM + 1, colM);
                 Node neighbour = new Node(neighbourState, this, rowM + 1, colM);
-                this.cost += 1;
+                if (state[rowM + 1][colM] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1;
+                }
+                result.add(neighbour);
+            }
+
+            // Move north west
+            if (rowM > 0 && rowM <= 7 && colM <= 12 && colM > 0 && state[rowM - 1][colM - 1] != 'N') {
+                char[][] neighbourState = swapper(state, rowM, colM, rowM - 1, colM - 1);
+                Node neighbour = new Node(neighbourState, this, rowM - 1, colM - 1);
+                if (state[rowM - 1][colM - 1] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1.5;
+                }
+                result.add(neighbour);
+            }
+
+            // Move north east
+            if (rowM > 0 && rowM <= 7 && colM < 12 && colM >= 0 && state[rowM - 1][colM + 1] != 'N') {
+                char[][] neighbourState = swapper(state, rowM, colM, rowM - 1, colM + 1);
+                Node neighbour = new Node(neighbourState, this, rowM - 1, colM + 1);
+                if (state[rowM - 1][colM + 1] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1.5;
+                }
+                result.add(neighbour);
+            }
+
+            // Move south west
+            if (rowM >= 0 && rowM < 7 && colM <= 12 && colM > 0 && state[rowM + 1][colM - 1] != 'N') {
+                char[][] neighbourState = swapper(state, rowM, colM, rowM + 1, colM - 1);
+                Node neighbour = new Node(neighbourState, this, rowM + 1, colM - 1);
+                if (state[rowM + 1][colM - 1] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1.5;
+                }
+                result.add(neighbour);
+            }
+
+            // Move south east
+            if (rowM >= 0 && rowM < 7 && colM < 12 && colM >= 0 && state[rowM + 1][colM + 1] != 'N') {
+                char[][] neighbourState = swapper(state, rowM, colM, rowM + 1, colM + 1);
+                Node neighbour = new Node(neighbourState, this, rowM + 1, colM + 1);
+                if (state[rowM + 1][colM + 1] == '~'){
+                    this.cost = 2;
+                }else {
+                    this.cost = 1.5;
+                }
                 result.add(neighbour);
             }
             this.neighbours = result;
@@ -152,11 +215,30 @@ public class Node{
         return result;
     }
 
-    private double evaluate() {
+    public double evaluate() {
         Node next = new Node(state);
         return next.getCost() + manhattan(next);
     }
 
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double cost, int manhattan) {
+        this.totalCost = cost + manhattan;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
 
     public char[][] getGoal() {
         return goal;
@@ -196,14 +278,6 @@ public class Node{
 
     public void setGoalCol(int goalCol) {
         this.goalCol = goalCol;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
     }
 
     public void setNeighbours(List<Node> neighbours) {
@@ -256,36 +330,6 @@ public class Node{
         result = 31 * result + Arrays.hashCode(state);
         return result;
     }
-
-
-//    public char[][] print
-//        @Override
-//    public int compareTo(Node next) {
-////        this.evaluate((Node) next.neighbours) - this.evaluate(next);
-//        return 0;
-//
-//    }
-
-//    @Override
-//    public int compare(Node x, Node y) {
-////        if (x.evaluate(x) < y.evaluate(y)) {
-////            return -1;
-////        }
-////        if (x.evaluate(x) > y.evaluate(y)) {
-////            return 1;
-////        }
-//        return (int) (x.evaluate(x) - y.evaluate(y));
-////        return 0;
-//    }
-
-//    @Override
-//    public int compareTo(Node other) {
-//        if (other == null) return 1;
-//
-//        return (int) (this.evaluate() - other.evaluate());
-//        //return -1;
-//    }
-
 
     @Override
     public String toString() {

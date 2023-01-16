@@ -2,14 +2,11 @@ package MitkoMazeTask.src.solution;
 import java.util.Comparator;
 import java.util.*;
 
-import static MitkoMazeTask.src.solution.Node.manhattan;
-
 public class pathFinder {
     private Node root;
     int time = 0;
-    private boolean isFound = false;
     private List<String> solution;
-
+    private boolean isFound = false;
     public pathFinder(char[][] startState) {
         this.root = new Node(startState);
     }
@@ -22,17 +19,13 @@ public class pathFinder {
         this.root = root;
     }
 
-    Comparator<? super Node> comparator = new Comparator<Node>() {
-      public int compare(Node a,Node b) {
-            return (a.getCost() + manhattan(a)) - (b.getCost() + manhattan(b));
-        }
-    };
-//    private class comparator implements Comparator<Node>{			//comparator for manhattan heuristic and totalCost
-//
-//        public int compare(Node a,Node b) {
-//            return (int) ((a.getCost() + manhattan(a)) - (b.getCost() + manhattan(b)));
+//    Comparator<? super Node> comparator = new Comparator<Node>() {
+//      public int compare(Node a,Node b) {
+//            return (a.getCost() + manhattan(a)) - (b.getCost() + manhattan(b));
 //        }
-//    }
+//    };
+
+    Comparator<? super Node> comparator =Comparator.comparingDouble(p -> p.getTotalCost());
 
     public void aStar() {
         // stateSet is a set that contains node that are already visited
@@ -52,21 +45,16 @@ public class pathFinder {
             if (currentNode.getMCol() == currentNode.getGoalCol() && currentNode.getMRow() == currentNode.getGoalRow()){
                 solved(currentNode);
                 this.isFound = true;
-                System.out.println(time);
                 return;
             }
 
             List<Node> neighbours = currentNode.getNeighbours();
             for (Node neighbour: neighbours) {
-               // Node child = new Node(neighbour.getState());
-//                currentNode.addNeighbour(child);
-//                child.setParent(currentNode);
-
-//                neighbour.setCost(manhattan(neighbour));
+                neighbour.setTotalCost(neighbour.evaluate() + currentNode.getTotalCost());
                 nodePriorityQueue.add(neighbour);
 
             }
-            time += 1;
+            //time += 1;
         }
 
     }
@@ -85,10 +73,8 @@ public class pathFinder {
         List<String> solution = new ArrayList<>();
 
         Node current = solved;
-        int counter = 0;
         while (current != null) {
             solution.add(0,getSpot(current));
-            //counter++;
             current = current.getParent();
         }
 

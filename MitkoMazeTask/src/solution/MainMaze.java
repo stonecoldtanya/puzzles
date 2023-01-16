@@ -6,14 +6,14 @@ import java.util.List;
 public class MainMaze {
 
     public static void main(String[] args) {
-        char[][] startState = {{'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
-                {'*', '*', '*', '*', '*', '*', '*', 'N', 'N', 'N', '*', '*', '*'},
-                {'*', '*', 'N', 'N', '*', '*', 'N', 'N', '*', 'N', '*', '*', '*'},
-                {'*', '*', '*', 'N', '*', '*', '*', '*', '*', 'N', 'N', 'N', '*'},
-                {'*', '*', '*', 'N', '*', '*', '*', '*', '*', 'N', '*', '*', '*'},
-                {'M', '*', '*', 'N', 'N', 'N', 'N', 'N', 'N', 'N', '*', '*', '*'},
-                {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
-                {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'}};
+        char[][] startState = {{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'N', 'N', 'N', ' ', ' ', ' '},
+                                {' ', ' ', 'N', 'N', ' ', ' ', 'N', 'N', ' ', 'N', ' ', ' ', ' '},
+                                {' ', '~', ' ', 'N', ' ', ' ', '~', ' ', ' ', 'N', ' ', ' ', ' '},
+                                {' ', ' ', ' ', 'N', ' ', ' ', '~', ' ', ' ', 'N', ' ', ' ', ' '},
+                                {'M', '~', ' ', 'N', 'N', 'N', 'N', 'N', 'N', 'N', ' ', ' ', ' '},
+                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', ' '}};
 
         pathFinder a = new pathFinder(startState);
         System.out.printf("The puzzle is:");
@@ -28,21 +28,16 @@ public class MainMaze {
 
     }
     private static void printMaze(char[][] startState) {
+        System.out.println(" __________________________ ");
         for (int y = 0; y <= 7; y++) {
-            for (int x = 0; x <= 12; x++) {
+            System.out.print("|");
+            for (int x = 0; x < 13; x++) {
                 System.out.print(" " + startState[y][x]);
             }
+            System.out.print("|");
             System.out.println();
         }
+        System.out.println(" __________________________ ");
         System.out.println();
     }
-//    public static Object printMatrix(char[][] matrix) {
-//        for (int i = 0; i < matrix.length; i++)
-//            // Loop through all elements of current row
-//            for (int j = 0; j < matrix[i].length; j++)
-//                System.out.print(matrix[i][j] + " ");
-//
-//        return null;
-//    }
-
 }
